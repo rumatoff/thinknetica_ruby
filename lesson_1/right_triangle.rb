@@ -15,9 +15,7 @@ isosceles = (a == b || a == c || b == c) && !equilateral
 
 sides = [a, b, c].sort!
 
-a = sides[0]
-b = sides[1]
-c = sides[2]
+a, b, c = sides
 
 if a**2 + b**2 == c**2
   puts 'Треугольник прямоугольный'
