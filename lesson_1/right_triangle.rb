@@ -9,21 +9,17 @@ c = gets.chomp.to_f
 
 abort 'Таких треугольников не бывает !!!!' if a <= 0 || b <= 0 || c <= 0
 
-equilateral = a == b && b == c ? true : false
+equilateral = a == b && b == c
 
-isosceles = (a == b || a == c || b == c) && !equilateral ? true : false
+isosceles = (a == b || a == c || b == c) && !equilateral
 
-if a > b && a > c
-  c1 = a
-  a = c
-elsif b > a && b > c
-  c1 = b
-  b = c
-else
-  c1 = c
-end
+sides = [a, b, c].sort!
 
-if a**2 + b**2 == c1**2
+a = sides[0]
+b = sides[1]
+c = sides[2]
+
+if a**2 + b**2 == c**2
   puts 'Треугольник прямоугольный'
 else
   puts 'Треугольник не прямоугольный'
