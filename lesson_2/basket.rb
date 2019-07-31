@@ -1,9 +1,8 @@
 basket = {}
-i = 1
 basket_full_price = 0
 
 loop do
-  print "Введите название товара №#{i}: "
+  print "Введите название товара: "
   name = gets.chomp
 
   break if name == 'стоп' || name == 'stop'
@@ -15,7 +14,6 @@ loop do
   quantity = gets.chomp.to_f
 
   basket[name] = { price: price, quantity: quantity, full_price: price * quantity }
-  i += 1
 end
 
 basket.each_value do |composition|

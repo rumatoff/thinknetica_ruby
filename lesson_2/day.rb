@@ -18,6 +18,6 @@ else
   puts 'Год не високосный.'
 end
 
-days = months[0..month - 2].reduce(:+) + day
+days = months.take(month - 2).sum + day
 
 puts "Порядковый номер даты: #{days}"
