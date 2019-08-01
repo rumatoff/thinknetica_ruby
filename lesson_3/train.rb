@@ -1,7 +1,7 @@
 class Train
   attr_reader :number, :type
-  attr_accessor :speed, :wagons, :route
-  def initialize(number, type, wagons)
+
+  def initialize(number, type, wagons = 20)
     @number = number
     @type = type
     @wagons = wagons
@@ -9,50 +9,77 @@ class Train
   end
 
   def accelerate(speed)
-    self.speed += speed
+    @speed += speed
   end
 
   def stop
-    self.speed = 0
+    @speed = 0
   end
 
   def move?
-    true if self.speed.positive?
+    true if @speed.positive?
   end
 
   def add_wagon
-    self.wagons += 1 unless move?
+    @wagons += 1 unless move?
   end
 
   def remove_wagon
-    self.wagons -= 1 unless move? || self.wagons.zero?
+    @wagons -= 1 unless move? || @wagons.zero?
   end
 
   def add_route(route)
-    self.route = route
-    route.stations[0].take_train(self)
+    @route = route
+    @route.stations[0].take_train(self)
   end
 
   def current_station
-    route.stations.find { |station| station.trains.include?(self) }
+    @route.stations.find { |station| station.trains.include?(self) }
   end
 
   def previous_station
-    route.stations[route.stations.index(current_station) - 1]
+    if start_station?
+      false
+    else
+      @route.stations[@route.stations.index(current_station) - 1]
+    end
   end
 
   def next_station
-    route.stations[route.stations.index(current_station) + 1]
+    if last_station?
+      false
+    else
+      @route.stations[@route.stations.index(current_station) + 1]
+    end
   end
 
   def forward
-    station = next_station
-    current_station.send_train(self)
-    station.take_train(self)
+    if last_station?
+      false
+    else
+      station = next_station
+      move(station)
+    end
   end
 
   def backward
-    station = previous_station
+    if start_station?
+      false
+    else
+      station = previous_station
+      move(station)
+    end
+  end
+
+  def last_station?
+    current_station == @route.stations[-1]
+  end
+
+  def start_station?
+    current_station == @route.stations[0]
+  end
+
+  def move(station)
     current_station.send_train(self)
     station.take_train(self)
   end
