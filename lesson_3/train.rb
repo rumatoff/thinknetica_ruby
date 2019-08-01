@@ -25,11 +25,7 @@ class Train
   end
 
   def remove_wagon
-    if self.wagons.zero? || move?
-      false
-    else
-      self.wagons -= 1
-    end
+    self.wagons -= 1 unless move? || self.wagons.zero?
   end
 
   def add_route(route)
@@ -42,11 +38,11 @@ class Train
   end
 
   def previous_station
-    route.stations[route.stations.index(self.current_station) - 1]
+    route.stations[route.stations.index(current_station) - 1]
   end
 
   def next_station
-    route.stations[route.stations.index(self.current_station) + 1]
+    route.stations[route.stations.index(current_station) + 1]
   end
 
   def forward
