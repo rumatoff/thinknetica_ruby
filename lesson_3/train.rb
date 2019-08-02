@@ -38,7 +38,7 @@ class Train
   end
 
   def previous_station
-    if start_station?
+    if current_station == @route.stations[0]
       false
     else
       @route.stations[@route.stations.index(current_station) - 1]
@@ -46,7 +46,7 @@ class Train
   end
 
   def next_station
-    if last_station?
+    if current_station == @route.stations[-1]
       false
     else
       @route.stations[@route.stations.index(current_station) + 1]
@@ -54,7 +54,7 @@ class Train
   end
 
   def forward
-    if last_station?
+    if next_station
       false
     else
       station = next_station
@@ -63,20 +63,12 @@ class Train
   end
 
   def backward
-    if start_station?
+    if previous_station
       false
     else
       station = previous_station
       move(station)
     end
-  end
-
-  def last_station?
-    current_station == @route.stations[-1]
-  end
-
-  def start_station?
-    current_station == @route.stations[0]
   end
 
   def move(station)
