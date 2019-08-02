@@ -1,5 +1,5 @@
 class Train
-  attr_reader :number, :wagons
+  attr_reader :number, :wagons, :route
 
   def initialize(number)
     @number = number
@@ -20,16 +20,16 @@ class Train
   end
 
   def remove_wagon
-    @wagons.pop unless move? || @wagons.zero?
+    @wagons.pop unless move? || @wagons.count.zero?
   end
 
   def add_route(route)
     @route = route
-    @route.stations[0].take_train(self)
+    @route.stations[0][0].take_train(self)
   end
 
   def current_station
-    @route.stations.find { |station| station.trains.include?(self) }
+    @route.stations.find { |station| station[0].trains.include?(self) }
   end
 
   def previous_station
@@ -66,16 +66,17 @@ class Train
     end
   end
 
-  protected
+  def move?
+    true if @speed.positive?
+  end
+
+  private
 
   attr_writer :wagons, :speed
 
   def move(station)
-    current_station.send_train(self)
-    station.take_train(self)
+    current_station[0].send_train(self)
+    station[0].take_train(self)
   end
 
-  def move?
-    true if @speed.positive?
-  end
 end
