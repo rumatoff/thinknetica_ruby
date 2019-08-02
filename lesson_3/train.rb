@@ -55,24 +55,19 @@ class Train
 
   def forward
     if next_station
-      false
-    else
       station = next_station
       move(station)
+    else
+      false
     end
   end
 
   def backward
     if previous_station
-      false
-    else
       station = previous_station
       move(station)
+    else
+      false
     end
-  end
-
-  def move(station)
-    current_station.send_train(self)
-    station.take_train(self)
   end
 end
