@@ -1,6 +1,6 @@
 class PassengerTrain < Train
 
   def valid_wagon?(wagon)
-    wagon.class == PassengerWagon
+    wagon.type == type
   end
 end

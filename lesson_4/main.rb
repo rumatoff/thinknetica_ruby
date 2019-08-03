@@ -3,6 +3,7 @@ require_relative 'train'
 require_relative 'route'
 require_relative 'passenger_train'
 require_relative 'cargo_train'
+require_relative 'wagon'
 require_relative 'cargo_wagon'
 require_relative 'passenger_wagon'
 
@@ -180,7 +181,7 @@ class Main
   end
 
   def create_train(number, type)
-    type == :passenger ? train = PassengerTrain.new(number) : train = CargoTrain.new(number)
+    type == :passenger ? train = PassengerTrain.new(number, type) : train = CargoTrain.new(number, type)
     trains << train
     puts "Поезд номер #{number} успешно создан"
   end
@@ -193,7 +194,7 @@ class Main
     print 'Введите номер поезда: '
     number = gets.chomp.to_i
     train = select_train(number)
-    train.class == CargoTrain ? wagon = CargoWagon.new : wagon = PassengerWagon.new
+    train.type == :cargo ? wagon = CargoWagon.new(:cargo) : wagon = PassengerWagon.new(:passenger)
     train.add_wagon(wagon)
     puts "Вагон успешно добавлен к поезду #{number}, общее количество вагонов #{train.wagons.size}"
   end

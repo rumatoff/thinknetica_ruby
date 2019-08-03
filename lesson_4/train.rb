@@ -1,10 +1,11 @@
 class Train
-  attr_reader :number, :wagons, :route
+  attr_reader :number, :wagons, :route, :type
 
-  def initialize(number)
+  def initialize(number, type)
     @number = number
     @wagons = []
     @speed = 0
+    @type = type
   end
 
   def accelerate(speed)
