@@ -233,18 +233,15 @@ class Main
 
   def add_route_train(number, first, last)
     train = select_train(number)
-
     first_station = select_station(first)
     last_station = select_station(last)
-
     route = Route.new(first_station, last_station)
-
-    route.stations.each { |station| puts station[0].name }
+    route.stations.each { |station| puts station.name }
     train.add_route(route)
   end
 
   def select_station(name)
-    @stations.select { |station| station.name == name }
+    @stations.find { |station| station.name == name }
   end
 
   def add_waypoint(number, station)

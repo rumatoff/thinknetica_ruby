@@ -25,11 +25,11 @@ class Train
 
   def add_route(route)
     @route = route
-    @route.stations[0][0].take_train(self)
+    @route.stations[0].take_train(self)
   end
 
   def current_station
-    @route.stations.find { |station| station[0].trains.include?(self) }
+    @route.stations.find { |station| station.trains.include?(self) }
   end
 
   def previous_station
@@ -75,8 +75,8 @@ class Train
   attr_writer :wagons, :speed
 
   def move(station)
-    current_station[0].send_train(self)
-    station[0].take_train(self)
+    current_station.send_train(self)
+    station.take_train(self)
   end
 
 end
