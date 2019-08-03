@@ -38,49 +38,50 @@ class Main
   private
 
   def station_menu
+    station_menu_list
+    input = gets.chomp.to_i
+
+    case input
+    when 1
+      create_station
+      station_menu
+    when 2
+      del_station
+      station_menu
+    when 3
+      station_list
+      station_menu
+    when 4
+      trains_list
+      station_menu
+    when 0
+      main_menu
+    else
+      input_error
+      station_menu
+    end
+  end
+
+  def station_menu_list
     puts '1. Создание станции'
     puts '2. Удаление станции'
     puts '3. Просмотр списка станций'
     puts '4. Просмотр списка поездов на станции'
     puts 'Основное меню: 0'
     print 'Ваш выбор: '
-    input = gets.chomp.to_i
-
-    case input
-    when 1
-      print 'Введите имя станции: '
-      name = gets.chomp.to_s
-      create_station(name)
-      station_menu
-    when 2
-      print 'Введите имя станции: '
-      name = gets.chomp.to_s
-      del_station(name)
-      station_menu
-    when 3
-      station_list
-      station_menu
-    when 4
-      print 'Введите имя станции: '
-      name = gets.chomp.to_s
-      trains_list(name)
-      station_menu
-    when 0
-      main_menu
-    else
-      puts 'Не корректный ввод'
-      print system('reset')
-      station_menu
-    end
   end
 
-  def create_station(name)
+  def create_station
+    print 'Введите имя станции: '
+    name = gets.chomp.to_s
     station = Station.new(name)
     stations << station
     puts "Станция #{name} успешно создана"
   end
 
-  def del_station(name)
+  def del_station
+    print 'Введите имя станции: '
+    name = gets.chomp.to_s
     stations.each { |station| stations.delete(station) if station.name == name }
     puts "Станция #{name} успешно удалена"
   end
@@ -94,17 +95,7 @@ class Main
   end
 
   def train_menu
-    puts '1. Создание пасажирского поезда'
-    puts '2. Создание грузового поезда'
-    puts '3. Добавить вагон к поезду'
-    puts '4. Отцепить вагон от поезда'
-    puts '5. Добавить маршрут'
-    puts '6. Добавить точку к маршруту'
-    puts '7. Удалить точку маршрута'
-    puts '8. Переместить поезд по маршруту веперд'
-    puts '9. Переместить поезд по маршруту назад'
-    puts 'Основное меню: 0'
-    print 'Ваш выбор: '
+    train_menu_list
     input = gets.chomp.to_i
 
     case input
@@ -119,14 +110,10 @@ class Main
       create_train(number, :cargo)
       train_menu
     when 3
-      print 'Введите номер поезда: '
-      number = gets.chomp.to_i
-      add_new_wagon(number)
+      add_new_wagon
       train_menu
     when 4
-      print 'Введите номер поезда: '
-      number = gets.chomp.to_i
-      del_wagon(number)
+      del_wagon
       train_menu
     when 5
       if @stations.count < 2
@@ -136,16 +123,7 @@ class Main
         puts 'Создайте хотя бы 1 поезд'
         train_menu
       else
-        print 'Введите номер поезда: '
-        number = gets.chomp.to_i
-        puts 'Созданные станции: '
-        station_list
-        print 'Введите имя начальной станции: '
-        first = gets.chomp
-        print 'Введите имя конечной станции: '
-        last = gets.chomp
-
-        add_route_train(number, first, last)
+        add_route_train
         train_menu
       end
     when 6
@@ -156,41 +134,44 @@ class Main
         puts 'Создайте хотя бы 1 поезд'
         train_menu
       else
-        print 'Введите номер поезда: '
-        number = gets.chomp.to_i
-        print 'Введите точку маршрута (станция): '
-        waypoint = gets.chomp
-        add_waypoint(number, waypoint)
+        add_waypoint
         train_menu
       end
     when 7
-      print 'Введите номер поезда: '
-      number = gets.chomp.to_i
-      print 'Введите точку маршрута которую необходимо удалить (станция): '
-      waypoint = gets.chomp
-      remove_waypoint(number, waypoint)
+      remove_waypoint
       train_menu
     when 8
-      print 'Введите номер поезда: '
-      number = gets.chomp.to_i
-      forward_train(number)
+      forward_train
       train_menu
     when 9
-      print 'Введите номер поезда: '
-      number = gets.chomp.to_i
-      backward_train(number)
+      backward_train
       train_menu
     when 0
       main_menu
     else
-      puts 'Не корректный ввод'
-      print system('reset')
+      input_error
       train_menu
     end
   end
 
-  def trains_list(name)
-    station = stations.find { |station| station.name == name }
+  def train_menu_list
+    puts '1. Создание пасажирского поезда'
+    puts '2. Создание грузового поезда'
+    puts '3. Добавить вагон к поезду'
+    puts '4. Отцепить вагон от поезда'
+    puts '5. Добавить маршрут'
+    puts '6. Добавить точку к маршруту'
+    puts '7. Удалить точку маршрута'
+    puts '8. Переместить поезд по маршруту веперд'
+    puts '9. Переместить поезд по маршруту назад'
+    puts 'Основное меню: 0'
+    print 'Ваш выбор: '
+  end
+
+  def trains_list
+    print 'Введите имя станции: '
+    name = gets.chomp.to_s
+    station = select_station(name)
     if station.trains.empty?
       puts "На станции #{station.name} нет поездов."
     else
@@ -208,35 +189,54 @@ class Main
     trains.find{ |train| train.number == number }
   end
 
-  def add_new_wagon(number)
+  def add_new_wagon
+    print 'Введите номер поезда: '
+    number = gets.chomp.to_i
     train = select_train(number)
     train.class == CargoTrain ? wagon = CargoWagon.new : wagon = PassengerWagon.new
     train.add_wagon(wagon)
     puts "Вагон успешно добавлен к поезду #{number}, общее количество вагонов #{train.wagons.size}"
   end
 
-  def del_wagon(number)
+  def del_wagon
+    print 'Введите номер поезда: '
+    number = gets.chomp.to_i
     train = select_train(number)
     train.remove_wagon
     puts "Вагон успешно отцеплен от поезда #{number}, общее количество вагонов #{train.wagons.size}"
   end
 
-  def forward_train(number)
+  def forward_train
+    print 'Введите номер поезда: '
+    number = gets.chomp.to_i
     train = select_train(number)
     train.forward
   end
 
-  def backward_train(number)
+  def backward_train
+    print 'Введите номер поезда: '
+    number = gets.chomp.to_i
     train = select_train(number)
     train.backward
   end
 
-  def add_route_train(number, first, last)
+  def add_route_train
+    print 'Введите номер поезда: '
+    number = gets.chomp.to_i
+
+    puts 'Созданные станции: '
+    station_list
+
+    print 'Введите имя начальной станции: '
+    first = gets.chomp
+
+    print 'Введите имя конечной станции: '
+    last = gets.chomp
+
     train = select_train(number)
     first_station = select_station(first)
     last_station = select_station(last)
     route = Route.new(first_station, last_station)
-    route.stations.each { |station| puts station.name }
     train.add_route(route)
   end
 
@@ -244,14 +244,27 @@ class Main
     @stations.find { |station| station.name == name }
   end
 
-  def add_waypoint(number, station)
+  def add_waypoint
+    print 'Введите номер поезда: '
+    number = gets.chomp.to_i
+    print 'Введите точку маршрута (станция): '
+    station = gets.chomp
     train = select_train(number)
-    puts train.route.add_station(station)
+    train.route.add_station(station)
   end
 
-  def remove_waypoint(number, station)
+  def remove_waypoint
+    print 'Введите номер поезда: '
+    number = gets.chomp.to_i
+    print 'Введите точку маршрута которую необходимо удалить (станция): '
+    station = gets.chomp
     train = select_train(number)
     puts train.route.delete_station(station)
+  end
+
+  def input_error
+    puts 'Не корректный ввод'
+    print system('reset')
   end
 
 end
