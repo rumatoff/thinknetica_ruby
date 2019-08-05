@@ -194,7 +194,7 @@ class Main
     print 'Введите номер поезда: '
     number = gets.chomp.to_i
     train = select_train(number)
-    train.type == :cargo ? wagon = CargoWagon.new(:cargo) : wagon = PassengerWagon.new(:passenger)
+    wagon = train.type == :cargo ? CargoWagon.new : PassengerWagon.new
     train.add_wagon(wagon)
     puts "Вагон успешно добавлен к поезду #{number}, общее количество вагонов #{train.wagons.size}"
   end
