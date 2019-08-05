@@ -5,6 +5,7 @@ class PassengerTrain < Train
     @wagons = []
     @speed = 0
     @type = type
+    register_instance
   end
 
   def valid_wagon?(wagon)

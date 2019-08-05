@@ -1,10 +1,13 @@
 class Route
+  include InstanceCounter
+
   attr_reader :stations, :first_station, :last_station
 
   def initialize(first_station, last_station)
     @first_station = first_station
     @last_station = last_station
     @stations = [first_station, last_station]
+    register_instance
   end
 
   def add_station(station)

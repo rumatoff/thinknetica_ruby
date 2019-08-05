@@ -1,11 +1,22 @@
 class Train
+  include Manufacturer
+  include InstanceCounter
+
   attr_reader :number, :wagons, :route, :type
+
+  @@trains = {}
+
+  def self.find(number)
+    @@trains[number] if @@trains[number]
+  end
 
   def initialize(number, type)
     @number = number
     @wagons = []
     @speed = 0
     @type = type
+    @@trains[number] = self
+    register_instance
   end
 
   def accelerate(speed)
@@ -79,5 +90,4 @@ class Train
     current_station.send_train(self)
     station.take_train(self)
   end
-
 end
