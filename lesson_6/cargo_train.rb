@@ -9,8 +9,4 @@ class CargoTrain < Train
     @@trains[number] = self
     register_instance
   end
-
-  def valid_wagon?(wagon)
-    wagon.type == type
-  end
 end

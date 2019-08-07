@@ -91,6 +91,10 @@ class Train
     false
   end
 
+  def valid_wagon?(wagon)
+    wagon.type == type
+  end
+
   private
 
   attr_writer :wagons, :speed
