@@ -1,6 +1,6 @@
 class CargoWagon < Wagon
 
-  attr_reader :free_volume, :number
+  attr_reader :free_volume, :volume_init, :number
 
   def initialize(number, volume_init, type = :cargo)
     @number = number

@@ -106,6 +106,10 @@ class Train
     wagon.type == type
   end
 
+  def each_wagon
+    @wagons.each { |wagon| yield(wagon) } if block_given?
+  end
+
   private
 
   attr_writer :wagons, :speed

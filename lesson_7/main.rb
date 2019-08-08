@@ -53,6 +53,9 @@ class Main
     when 4
       trains_list
       station_menu
+    when 5
+      station_train
+      station_menu
     when 0
       main_menu
     else
@@ -66,6 +69,7 @@ class Main
     puts '2. Удаление станции'
     puts '3. Просмотр списка станций'
     puts '4. Просмотр списка поездов на станции'
+    puts '5. Поезда на всех станциях'
     puts 'Основное меню: 0'
     print 'Ваш выбор: '
   end
@@ -81,6 +85,7 @@ class Main
     puts '8. Переместить поезд по маршруту веперд'
     puts '9. Переместить поезд по маршруту назад'
     puts '10. Занять место или объем'
+    puts '11. Список вагонов у поезда: '
     puts 'Основное меню: 0'
     print 'Ваш выбор: '
   end
@@ -140,8 +145,9 @@ class Main
     when 10
       take_place
       train_menu
-    # TODO Выводить список вагонов у поезда (в указанном выше формате), используя созданные методы
-    # TODO Выводить список поездов на станции (в указанном выше формате), используя  созданные методы
+    when 11
+      train_wagons
+      train_menu
     when 0
       main_menu
     else

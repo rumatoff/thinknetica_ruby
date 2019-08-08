@@ -3,8 +3,7 @@ module RouteManager
   private
 
   def add_route_train
-    print 'Введите номер поезда: '
-    number = gets.chomp
+    train = take_train
 
     puts 'Созданные станции: '
     station_list
@@ -15,7 +14,6 @@ module RouteManager
     print 'Введите имя конечной станции: '
     last = gets.chomp
 
-    train = select_train(number)
     first_station = select_station(first)
     last_station = select_station(last)
     route = Route.new(first_station, last_station)
@@ -23,12 +21,8 @@ module RouteManager
   end
 
   def add_waypoint
-    print 'Введите номер поезда: '
-    number = gets.chomp
-    print 'Введите точку маршрута (станция): '
-    station_name = gets.chomp
-    station = select_station(station_name)
-    train = select_train(number)
+    train = take_train
+    station = take_station
     train.route.add_station(station)
   rescue StandardError => e
     puts e.message
@@ -36,12 +30,8 @@ module RouteManager
   end
 
   def remove_waypoint
-    print 'Введите номер поезда: '
-    number = gets.chomp
-    print 'Введите точку маршрута которую необходимо удалить (станция): '
-    station_name = gets.chomp
-    station = select_station(station_name)
-    train = select_train(number)
+    train = take_train
+    station = take_station
     train.route.delete_station(station)
   rescue StandardError => e
     puts e.message

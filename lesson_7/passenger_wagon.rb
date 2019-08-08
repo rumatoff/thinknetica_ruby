@@ -1,6 +1,6 @@
 class PassengerWagon < Wagon
 
-  attr_reader :seat_free, :number
+  attr_reader :seat_free, :seat_init, :number
 
   def initialize(number, seat_init, type = :passenger)
     @number = number

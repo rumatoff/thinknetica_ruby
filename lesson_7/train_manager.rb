@@ -11,6 +11,9 @@ module TrainManager
     else
       station.trains.each { |train| puts "Поезд номер: #{train.number}" }
     end
+  rescue StandardError => e
+    puts e.message
+    station_menu
   end
 
   def create_train(number, type)
@@ -34,9 +37,7 @@ module TrainManager
   end
 
   def forward_train
-    print 'Введите номер поезда: '
-    number = gets.chomp
-    train = select_train(number)
+    train = take_train
     train.forward
   rescue StandardError => e
     puts e.message
@@ -44,12 +45,36 @@ module TrainManager
   end
 
   def backward_train
-    print 'Введите номер поезда: '
-    number = gets.chomp
-    train = select_train(number)
+    train = take_train
     train.backward
   rescue StandardError => e
     puts e.message
     train_menu
+  end
+
+  def train_wagons
+    train = take_train
+    puts "Поезд номер #{train.number}, тип: #{train.class},  количество вагонов: #{train.wagons.count}"
+    if train.type == :passenger
+      train.each_wagon do |wagon|
+        print "Вагон номер: #{wagon.number}, "
+        print "всего мест: #{wagon.seat_init}, "
+        print "свободных мест: #{wagon.seat_free}, "
+        puts "занятых мест: #{wagon.occupied_seats}."
+      end
+    else
+      train.each_wagon do |wagon|
+        print "Вагон номер: #{wagon.number}, "
+        print "полный объем: #{wagon.volume_init}, "
+        print "свободный объем: #{wagon.free_volume}, "
+        puts "занятый объем: #{wagon.occupied_volume}."
+      end
+    end
+  end
+
+  def take_train
+    print 'Введите номер поезда: '
+    number = gets.chomp
+    select_train(number)
   end
 end

@@ -22,10 +22,7 @@ module WagonManager
   end
 
   def add_new_wagon
-    print 'Введите номер поезда: '
-    number = gets.chomp
-    train = select_train(number)
-
+    train = take_train
     wagon = if train.type == :cargo
               create_cargo_wagon
             else
@@ -39,9 +36,7 @@ module WagonManager
   end
 
   def del_wagon
-    print 'Введите номер поезда: '
-    train_number = gets.chomp
-    train = select_train(train_number)
+    train = take_train
     print 'Введите номер вагона: '
     wagon_number = gets.chomp.to_i
     train.remove_wagon(wagon_number)
@@ -52,12 +47,11 @@ module WagonManager
   end
 
   def take_place
-    print 'Введите номер поезда: '
-    number = gets.chomp
-    train = select_train(number)
+    train = take_train
 
     print 'Введите номер вагона: '
     wagon_number = gets.chomp.to_i
+
     wagon = train.select_wagon(wagon_number)
 
     if wagon.type == :passenger
