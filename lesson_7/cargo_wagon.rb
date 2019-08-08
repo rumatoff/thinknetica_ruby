@@ -5,7 +5,8 @@ class CargoWagon < Wagon
   def initialize(number, volume_init, type = :cargo)
     @number = number
     @type = type
-    @volume_init, @free_volume = volume_init
+    @volume_init = volume_init
+    @free_volume = volume_init
     valid!
   end
 

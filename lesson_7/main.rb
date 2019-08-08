@@ -2,6 +2,9 @@ require_relative 'dependences'
 
 class Main
   include StationManager
+  include TrainManager
+  include WagonManager
+  include RouteManager
 
   attr_reader :stations, :trains
 
@@ -67,6 +70,21 @@ class Main
     print 'Ваш выбор: '
   end
 
+  def train_menu_list
+    puts '1. Создание пасажирского поезда'
+    puts '2. Создание грузового поезда'
+    puts '3. Добавить вагон к поезду'
+    puts '4. Отцепить вагон от поезда'
+    puts '5. Добавить маршрут'
+    puts '6. Добавить точку к маршруту'
+    puts '7. Удалить точку маршрута'
+    puts '8. Переместить поезд по маршруту веперд'
+    puts '9. Переместить поезд по маршруту назад'
+    puts '10. Занять место или объем'
+    puts 'Основное меню: 0'
+    print 'Ваш выбор: '
+  end
+
   def train_menu
     train_menu_list
     input = gets.chomp.to_i
@@ -119,169 +137,17 @@ class Main
     when 9
       backward_train
       train_menu
+    when 10
+      take_place
+      train_menu
     # TODO Выводить список вагонов у поезда (в указанном выше формате), используя созданные методы
     # TODO Выводить список поездов на станции (в указанном выше формате), используя  созданные методы
-    # TODO Занимать место или объем в вагоне
     when 0
       main_menu
     else
       input_error
       train_menu
     end
-  end
-
-  def train_menu_list
-    puts '1. Создание пасажирского поезда'
-    puts '2. Создание грузового поезда'
-    puts '3. Добавить вагон к поезду'
-    puts '4. Отцепить вагон от поезда'
-    puts '5. Добавить маршрут'
-    puts '6. Добавить точку к маршруту'
-    puts '7. Удалить точку маршрута'
-    puts '8. Переместить поезд по маршруту веперд'
-    puts '9. Переместить поезд по маршруту назад'
-    puts 'Основное меню: 0'
-    print 'Ваш выбор: '
-  end
-
-  def trains_list
-    print 'Введите имя станции: '
-    name = gets.chomp.to_s
-    station = select_station(name)
-    if station.trains.empty?
-      puts "На станции #{station.name} нет поездов."
-    else
-      station.trains.each { |train| puts "Поезд номер: #{train.number}" }
-    end
-  end
-
-  def create_train(number, type)
-    type == :passenger ? train = PassengerTrain.new(number, type) : train = CargoTrain.new(number, type)
-    trains << train
-    puts "Поезд номер #{number} успешно создан"
-  rescue StandardError => e
-    puts e.message
-    train_menu
-  end
-
-  def select_train(number)
-    raise 'Номер поезда не может быть пустым' if number.empty? || number.nil?
-
-    train = trains.find { |train| train.number == number }
-    if train.nil?
-      raise 'Поезд с таким номером не найден'
-    else
-      train
-    end
-  end
-
-  def create_cargo_wagon
-    print 'Введите номер вагона: '
-    wagon_number = gets.chomp.to_i
-    print 'Введите объем вагона: '
-    init_volume = gets.chomp.to_f
-    CargoWagon.new(wagon_number, init_volume)
-  rescue StandardError => e
-    puts e.message
-    train_menu
-  end
-
-  def create_passenger_wagon
-    print 'Введите номер вагона: '
-    wagon_number = gets.chomp.to_i
-    print 'Введите количество свободных мест: '
-    seat_init = gets.chomp.to_i
-    PassengerWagon.new(wagon_number, seat_init)
-  end
-
-  def add_new_wagon
-    print 'Введите номер поезда: '
-    number = gets.chomp
-    train = select_train(number)
-
-    wagon = if train.type == :cargo
-              create_cargo_wagon
-            else
-              create_passenger_wagon
-            end
-    train.add_wagon(wagon)
-    puts "Вагон успешно добавлен к поезду #{number}, общее количество вагонов #{train.wagons.size}"
-  rescue StandardError => e
-    puts e.message
-    train_menu
-  end
-
-  def del_wagon
-    print 'Введите номер поезда: '
-    train_number = gets.chomp
-    print 'Введите номер вагона: '
-    wagon_number = gets.chomp.to_i
-    train = select_train(train_number)
-    train.remove_wagon(wagon_number)
-    puts "Вагон успешно отцеплен от поезда #{train.number}, общее количество вагонов #{train.wagons.size}"
-  rescue StandardError => e
-    puts e.message
-    train_menu
-  end
-
-  def forward_train
-    print 'Введите номер поезда: '
-    number = gets.chomp
-    train = select_train(number)
-    train.forward
-  end
-
-  def backward_train
-    print 'Введите номер поезда: '
-    number = gets.chomp
-    train = select_train(number)
-    train.backward
-  end
-
-  def add_route_train
-    print 'Введите номер поезда: '
-    number = gets.chomp
-
-    puts 'Созданные станции: '
-    station_list
-
-    print 'Введите имя начальной станции: '
-    first = gets.chomp
-
-    print 'Введите имя конечной станции: '
-    last = gets.chomp
-
-    train = select_train(number)
-    first_station = select_station(first)
-    last_station = select_station(last)
-    route = Route.new(first_station, last_station)
-    train.add_route(route)
-  end
-
-  def add_waypoint
-    print 'Введите номер поезда: '
-    number = gets.chomp
-    print 'Введите точку маршрута (станция): '
-    station_name = gets.chomp
-    station = select_station(station_name)
-    train = select_train(number)
-    train.route.add_station(station)
-  rescue StandardError => e
-    puts e.message
-    train_menu
-  end
-
-  def remove_waypoint
-    print 'Введите номер поезда: '
-    number = gets.chomp
-    print 'Введите точку маршрута которую необходимо удалить (станция): '
-    station_name = gets.chomp
-    station = select_station(station_name)
-    train = select_train(number)
-    train.route.delete_station(station)
-  rescue StandardError => e
-    puts e.message
-    train_menu
   end
 
   def input_error

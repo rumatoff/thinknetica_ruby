@@ -37,12 +37,16 @@ class Train
   def remove_wagon(wagon_number)
     raise 'Номер вагона не может быть пустым' if wagon_number.nil?
 
-    wagon = wagons.find { |wagon| wagon.number == wagon_number }
+    wagon = select_wagon(wagon_number)
     if wagon.nil?
       raise 'Вагон с таким номером не найден'
     else
       @wagons.delete(wagon) unless move? || @wagons.count.zero?
     end
+  end
+
+  def select_wagon(wagon_number)
+    wagons.find { |wagon| wagon.number == wagon_number }
   end
 
   def add_route(route)
@@ -86,10 +90,6 @@ class Train
     else
       false
     end
-  end
-
-  def select_wagon(number)
-
   end
 
   def move?

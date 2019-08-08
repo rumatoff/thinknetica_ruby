@@ -5,7 +5,8 @@ class PassengerWagon < Wagon
   def initialize(number, seat_init, type = :passenger)
     @number = number
     @type = type
-    @seat_init, @seat_free = seat_init
+    @seat_init = seat_init
+    @seat_free = seat_init
     valid!
   end
 

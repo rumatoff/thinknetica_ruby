@@ -2,17 +2,6 @@ module StationManager
 
   private
 
-  def create_station
-    print 'Введите имя станции: '
-    name = gets.chomp.to_s
-    station = Station.new(name)
-    stations << station
-    puts "Станция #{name} успешно создана"
-  rescue StandardError => e
-    puts e.message
-    station_menu
-  end
-
   def select_station(name)
     raise 'Имя станции не может быть пустым' if name.empty? || name.nil?
 
