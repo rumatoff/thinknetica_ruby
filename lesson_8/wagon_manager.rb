@@ -24,11 +24,7 @@ module WagonManager
 
   def add_new_wagon
     train = take_train
-    wagon = if train.type == :cargo
-              create_cargo_wagon
-            else
-              create_passenger_wagon
-            end
+    wagon = train.type == :cargo ? create_cargo_wagon : create_passenger_wagon
     train.add_wagon(wagon)
     puts "Вагон успешно добавлен к поезду #{train.number},
           общее количество вагонов #{train.wagons.size}"

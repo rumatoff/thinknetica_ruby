@@ -8,13 +8,6 @@ class Main
   include WagonManager
   include RouteManager
 
-  attr_reader :stations, :trains
-
-  def initialize
-    @stations = []
-    @trains = []
-  end
-
   MAIN_MENU = { '1': 'station_menu', '2': 'train_menu', '3': 'abort' }.freeze
   STATION_MENU = { '1': 'create_station', '2': 'del_station',
                    '3': 'station_list', '4': 'trains_list',
@@ -25,6 +18,13 @@ class Main
                  '7': 'remove_waypoint', '8': 'forward_train',
                  '9': 'backward_train', '10': 'take_place',
                  '11': 'train_wagons', '0': 'main_menu' }.freeze
+
+  attr_reader :stations, :trains
+
+  def initialize
+    @stations = []
+    @trains = []
+  end
 
   def main_menu
     main_menu_text
