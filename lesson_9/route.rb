@@ -2,8 +2,13 @@
 
 class Route
   include InstanceCounter
+  include Validation
+  extend Accessors
 
   attr_reader :stations, :first_station, :last_station
+
+  validate :first_station, :type, Station
+  validate :last_station, :type, Station
 
   def initialize(first_station, last_station)
     @first_station = first_station
@@ -25,9 +30,9 @@ class Route
 
   private
 
-  def validate!
-    raise 'Объект не сототвествует типу' unless stations_type_valid?
-  end
+  # def validate!
+  #   raise 'Объект не сототвествует типу' unless stations_type_valid?
+  # end
 
   def stations_type_valid?
     stations.first.is_a?(Station) && stations.last.is_a?(Station)

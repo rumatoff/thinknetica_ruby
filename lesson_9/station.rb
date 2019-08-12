@@ -2,8 +2,12 @@
 
 class Station
   include InstanceCounter
+  include Validation
+  extend Accessors
 
   attr_reader :name, :trains
+
+  validate :name, :presence
 
   @@stations = []
 
@@ -37,7 +41,7 @@ class Station
 
   private
 
-  def validate!
-    raise 'Имя не может быть пустым' if @name.empty? || @name.nil?
-  end
+  # def validate!
+  #   raise 'Имя не может быть пустым' if @name.empty? || @name.nil?
+  # end
 end

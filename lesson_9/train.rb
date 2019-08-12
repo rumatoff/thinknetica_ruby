@@ -3,10 +3,14 @@
 class Train
   include Manufacturer
   include InstanceCounter
+  include Validation
+  extend Accessors
 
   attr_reader :number, :wagons, :route, :type
 
   NUMBER_FORMAT = /^[a-z\d]{3}-?[a-z\d]{2}$/.freeze
+
+  validate :number, :format, NUMBER_FORMAT
 
   @@trains = {}
 
@@ -119,7 +123,7 @@ class Train
     station.take_train(self)
   end
 
-  def validate!
-    raise "Номер #{number} не соотвествует формату" if number !~ NUMBER_FORMAT
-  end
+  # def validate!
+  #   raise "Номер #{number} не соотвествует формату" if number !~ NUMBER_FORMAT
+  # end
 end
